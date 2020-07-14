@@ -1,0 +1,73 @@
+* {
+	margin:0;
+	padding: 0;
+}
+.game-screen {
+	width:100%;
+	height:100%;
+	background-color: #2F4858
+}
+.currentPlayerTurn {
+	padding-top: 3%;
+	font-size: 2em;
+	color: white;
+	text-align: center
+}
+.box-container {
+	padding-top: 7%;
+	display:flex;
+	flex-wrap: wrap;
+	height:24rem;
+	width:24rem;
+ 	margin: 0 auto;
+	height: 0 auto;
+}
+.box {
+	background-color: #2F4858;
+	height:8rem;
+	width:8rem;
+	text-align: center;
+	line-height: 1em; /*for vertical alignment*/
+	font-size: 6em;
+	color:white;
+	 
+}
+.box:nth-child(4), .box:nth-child(5), .box:nth-child(6) {
+	border-top: 0.05em solid #E86268;
+	border-bottom: 0.05em solid #E86268;
+	box-sizing: border-box;
+}
+.box:nth-child(2), .box:nth-child(5), .box:nth-child(8) {
+	border-left: 0.05em solid #E86268;
+	border-right: 0.05em solid #E86268;
+	box-sizing: border-box;
+}
+.game-buttons-container {
+	display: flex;
+	width:24rem;
+	padding-top: 3rem;
+}
+.button {
+	width:11rem;
+	height:3rem;
+	background-color: #04cfd4;
+	border:2px solid #00b1b5;
+	box-sizing: border-box;
+	border-radius: 1.5em;
+	color:white;
+	font-size: 1.2em;
+	text-align: center;
+	line-height: 2em;
+	letter-spacing: 0.3em;
+}
+.button:hover {
+	background-color: #00c0c4;
+	border:2px solid #b85156;
+	cursor:pointer;
+
+}
+.homeScreenButton {
+	margin-left: 2rem;
+}
+/*color palette*/
+/*https://mycolor.space/?hex=%23F28438&sub=1 */
