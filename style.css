@@ -15,11 +15,14 @@
 		margin: 0 auto;
 		padding-top: 5rem;
 		color:white;
+		user-select: none;  
+
 	}
 	.home-modal {
 		width: 30rem;
 		height:35rem;
 		margin: 0 auto;
+		padding-top: 2.5rem;
 		background-color: #E86268;
 		border-radius: 2em;
 		border: 0.2em solid  #b34b50;
@@ -29,15 +32,48 @@
 		text-align: center;
 		font-size: 2.5em;
 	 	color: white;
-		text-shadow: 0.05em 0.05em #00BEA1;
+		text-shadow: 0.1em 0.1em #6d4d7d;
 	}
 	.home-modal form {
-		width:100%;
-		margin: 0 auto;
+		margin-top: 2rem;
+		font-size: 1.5em;
+
+	}
+	.home-modal form label {
+		line-height: 3em;
+		text-shadow: 0.1em 0.1em #6d4d7d;
 	}
 	.home-modal input {
+		height:2rem;
+		width: 12rem;
+		border-radius: 0.4em;
+		border:none;
+	}
+	 
+	.home-modal .playAgainstAiTrue {
+		width:2rem;
+	}
+	.home-modal .playAgainstAiStyle {
+		line-height:2em;
+		vertical-align: bottom;
+	}
+	.submitPlayerName {
+		margin-top: 3rem;
+		width:12rem; 
+		height:3rem;
+		background-color: #7F5A91;
+		line-height: 2em;
+		cursor:pointer;
+		border: 0.1em solid #6d4d7d;
+		border-radius: 1em
+	}
+	.submitPlayerName:hover {
+		background-color: #6d4d7d;
+		border: 0.1em solid #6d4d7d;
 		
 	}
+
+	/*GAME SCREEN START*/
 	.game-screen {
 		width:100%;
 		height:100%;
