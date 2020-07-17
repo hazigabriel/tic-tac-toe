@@ -53,7 +53,7 @@
 		border:none;
 	}
 	 
-	.home-modal .playAgainstAiTrue {
+	.home-modal .playAgainstAiCheckBox{
 		width:2rem;
 	}
 	.home-modal .playAgainstAiStyle {
