@@ -83,7 +83,7 @@
 		background-color: #2F4858;
 		user-select: none; 
 		display: none;
-		 transition: 1s ease-out;
+		transition: 1s ease-out;
 
 	}
 	.currentGameStatus {
@@ -92,8 +92,14 @@
 		color: white;
 		text-align: center
 	}
+	.currentScore {
+		font-size: 1.2em;
+		color: #F28438;
+		padding-top: 1.5%;
+		text-align: center
+	} 
 	.box-container {
-		padding-top: 7%;
+		padding-top: 3%;
 		display:flex;
 		flex-wrap: wrap;
 		height:24rem;
