@@ -22,6 +22,7 @@
 			 
 			} else {
 				changePageModal.toGameScreen();
+				gameBoard.playerTurn(getUserInput().player1, "x")
 
 			}
 
@@ -80,6 +81,23 @@ const getUserInput = function(){
 const gameBoard = {
 	player1Moves: [],
 	player2Moves: [],
+	player1Score: 0,
+	player2Score: 0,
+	playerTurn: function(player, symbol){
+		document.querySelector(".currentGameStatus").innerHTML = `${player}'s (${symbol}) turn.`
+	},
+	renderPlayerScore: function(roundWinner){
+		let player1content = document.querySelector(".player1Score");
+		let player2content = document.querySelector(".player2Score");
+		if(roundWinner == "x") {
+			gameBoard.player1Score+1;
+			player1content.innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`
+		} else {
+			gameBoard.player2Score+1;
+			player2content.innerHTML= `${getUserInput().player1}: ${gameBoard.player2Score} points`
+		}
+
+	}
 }
 const gameFlow = {
 	renderPlayerChoice: function(){  
@@ -92,7 +110,7 @@ const gameFlow = {
 						return
 					} else {
 						e.innerHTML = "x";
-					 	
+					 	gameBoard.playerTurn(getUserInput().player2, "o")
 						gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
 						gameFlow.checkForWin()
 					}
@@ -103,6 +121,7 @@ const gameFlow = {
 						return
 					} else {
 						e.innerHTML = "o";
+						gameBoard.playerTurn(getUserInput().player1, "x")
 						gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(e));
 						gameFlow.checkForWin()
 					}
@@ -136,9 +155,11 @@ const gameFlow = {
 			if(checkIfSure) {
 				gameBoard.player1Moves = [];
 				gameBoard.player2Moves = [];
+				gameBoard.playerTurn(getUserInput().player1, "x");
 				for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
 					document.querySelectorAll(".box")[i].innerHTML = ""
 				}
+
 
 
 			}
@@ -146,6 +167,16 @@ const gameFlow = {
 
 		})
  
+	},
+	newRound: function(){
+		setTimeout(function(){
+			gameBoard.playerTurn(getUserInput().player1, "x");
+			gameBoard.player1Moves = [];
+			gameBoard.player2Moves = [];
+			for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
+				document.querySelectorAll(".box")[i].innerHTML = ""
+			}
+		}, 1500)
 	},
 	checkForWin: function(){
 		//first 3 indexs are for vertical winning combinations, next 3 for horizonal, and last two for diagonal
@@ -156,12 +187,17 @@ const gameFlow = {
 		let check = (arr, target) => target.every(v => arr.includes(v))
 		for(let i = 0; i < winChoices.length; i++) {
 			if(check(arr1, winChoices[i])) {
-				alert("X wins");
+				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player1} won!`;
+				gameBoard.player1Score++;
+				gameFlow.newRound();
+				gameBoard.renderPlayerScore("x")
+				
 				 
-			
 			} else if (check(arr2, winChoices[i])){
-				alert("O wins");
-		
+				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player1} won!`;
+				gameBoard.player2Score++;
+				gameFlow.newRound();
+				gameBoard.renderPlayerScore("o")
 				 
 			} else {
 				//alert(i + " plus win choices " + winChoices.length)
