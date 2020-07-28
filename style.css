@@ -92,6 +92,22 @@
 		color: white;
 		text-align: center
 	}
+	.newRoundButton {
+		width:6rem; 
+		height:2rem;
+		background-color: #00BEA1;
+		border:2px solid #00a68c;
+		box-sizing: border-box;
+		border-radius: 1.5em;
+		color:white;
+		font-size: 1em;
+		line-height: 1.5em;
+		text-align: center;
+		margin: 0 auto;
+		margin-top: 1rem;
+		display: none;
+		 
+	}
 	.currentScore {
 		font-size: 1.2em;
 		color: #F28438;

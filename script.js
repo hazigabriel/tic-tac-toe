@@ -108,36 +108,40 @@ const gameBoard = {
 	}
 }
 const gameFlow = {
+	continue: true,
 	renderPlayerChoice: function(){  
 		let squares = document.querySelectorAll(".box");
-		 
-		squares.forEach(function(e){
-			e.addEventListener("click", function(){
-				if(gameBoard.player1Moves.length == gameBoard.player2Moves.length || gameBoard.player1Moves.length == gameBoard.player2Moves.length){
-					if(e.innerHTML != "") {
-						return
-					} else {
-						e.innerHTML = "x";
-					 	gameBoard.playerTurn(getUserInput().player2, "o")
-						gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
-						gameFlow.checkForWin()
-					}
-					 
 
-				} else{
-					if(e.innerHTML != "") {
-						return
-					} else {
-						e.innerHTML = "o";
-						gameBoard.playerTurn(getUserInput().player1, "x")
-						gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(e));
-						gameFlow.checkForWin()
+		if(gameFlow.continue === false) {
+			return 
+		} else {
+			squares.forEach(function(e){
+				e.addEventListener("click", function(){
+					if(gameBoard.player1Moves.length == gameBoard.player2Moves.length || gameBoard.player1Moves.length == gameBoard.player2Moves.length){
+						if(e.innerHTML != "") {
+							return
+						} else {
+							e.innerHTML = "x";
+						 	gameBoard.playerTurn(getUserInput().player2, "o")
+							gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
+							gameFlow.checkForWin()
+						}
+						 
+
+					} else{
+						if(e.innerHTML != "") {
+							return
+						} else {
+							e.innerHTML = "o";
+							gameBoard.playerTurn(getUserInput().player1, "x")
+							gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(e));
+							gameFlow.checkForWin()
+						}
 					}
-				}
+				})
+
 			})
-
-		})
-
+		}
 	},
 	getUserChoiceIndex: function(e){
 		let squaresArray = Array.prototype.slice.call(document.querySelectorAll(".box"));
@@ -153,11 +157,11 @@ const gameFlow = {
 		document.querySelector(".playAgainstAiCheckbox").checked = false;
 	},
 	resetGame: function(){
+
 		let resetButton = document.querySelector(".resetGame");
 		let player1 = document.querySelector(".player1Score");
 		let player2 = document.querySelector(".player2Score");
 	 	
-
 
 		resetButton.addEventListener("click", function(){
 
@@ -187,14 +191,21 @@ const gameFlow = {
  
 	},
 	newRound: function(){
-		setTimeout(function(){
+		let newRoundButton = document.querySelector(".newRoundButton");
+
+		newRoundButton.addEventListener("click", function(){
 			gameBoard.playerTurn(getUserInput().player1, "x");
 			gameBoard.player1Moves = [];
 			gameBoard.player2Moves = [];
+
 			for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
-				document.querySelectorAll(".box")[i].innerHTML = ""
-			}
-		}, 1500)
+					document.querySelectorAll(".box")[i].innerHTML = ""
+				
+			};
+			newRoundButton.style.display = "none";
+		})
+
+		 
 	},
 	checkForWin: function(){
 		//first 3 indexs are for vertical winning combinations, next 3 for horizonal, and last two for diagonal
@@ -207,6 +218,7 @@ const gameFlow = {
 			if(check(arr1, winChoices[i])) {
 				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player1} won!`;
 				gameBoard.player1Score++;
+				document.querySelector(".newRoundButton").style.display = "block";
 				gameFlow.newRound();
 				gameBoard.renderPlayerScore("x");
 				return
@@ -214,17 +226,23 @@ const gameFlow = {
 			} else if (check(arr2, winChoices[i])){
 				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player2} won!`;
 				gameBoard.player2Score++;
+				document.querySelector(".newRoundButton").style.display = "block";
 				gameFlow.newRound();
 				gameBoard.renderPlayerScore("o");
 				return
 				 
-			} else {
-				 
+			} else if(arr1.length >= 5 && arr2.length >= 4) {
+				document.querySelector(".currentGameStatus").innerHTML = "It's a tie!";
+				document.querySelector(".newRoundButton").style.display = "block";
+				gameFlow.newRound();
+				gameBoard.renderPlayerScore("x");
+				return
 			}
 				
 		}
 
  
 		 
-	}
+	},
+	 
 }
