@@ -7,6 +7,7 @@
  		document.querySelector(".home-screen").style.display = "none";
  		document.querySelector(".game-screen").style.display = "block";
 
+ 		gameBoard.renderPlayersDefault();	
  		gameFlow.renderPlayerChoice() //start game
  		gameFlow.resetGame()
  	};
@@ -93,9 +94,16 @@ const gameBoard = {
 			gameBoard.player1Score+1;
 			player1content.innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`
 		} else {
-			gameBoard.player2Score+1;
-			player2content.innerHTML= `${getUserInput().player1}: ${gameBoard.player2Score} points`
+			gameBoard.player2Score+1	;
+			player2content.innerHTML= `${getUserInput().player2}: ${gameBoard.player2Score} points`
 		}
+
+	},
+	renderPlayersDefault: function(){
+		let player1content = document.querySelector(".player1Score");
+		let player2content = document.querySelector(".player2Score");
+		player1content.innerHTML = `${getUserInput().player1}: 0 points`;
+		player2content.innerHTML = `${getUserInput().player2}: 0 points`
 
 	}
 }
@@ -146,20 +154,30 @@ const gameFlow = {
 	},
 	resetGame: function(){
 		let resetButton = document.querySelector(".resetGame");
-		 
-	 
+		let player1 = document.querySelector(".player1Score");
+		let player2 = document.querySelector(".player2Score");
+	 	
 
 
 		resetButton.addEventListener("click", function(){
+
 			let checkIfSure = confirm("Are you sure you want to reset the score and the current round?")
 			if(checkIfSure) {
+			 
 				gameBoard.player1Moves = [];
 				gameBoard.player2Moves = [];
+
+				player1.innerHTML = `${getUserInput().player1}: 0 points`; 
+
+				player2.innerHTML = `${getUserInput().player2}: 0 points`; 
+
+				document.querySelector(".player2Score").innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`;
 				gameBoard.playerTurn(getUserInput().player1, "x");
+
 				for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
 					document.querySelectorAll(".box")[i].innerHTML = ""
-				}
-
+				};
+				gameBoard.renderPlayersDefault();
 
 
 			}
@@ -190,17 +208,17 @@ const gameFlow = {
 				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player1} won!`;
 				gameBoard.player1Score++;
 				gameFlow.newRound();
-				gameBoard.renderPlayerScore("x")
-				
+				gameBoard.renderPlayerScore("x");
+				return
 				 
 			} else if (check(arr2, winChoices[i])){
-				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player1} won!`;
+				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player2} won!`;
 				gameBoard.player2Score++;
 				gameFlow.newRound();
-				gameBoard.renderPlayerScore("o")
+				gameBoard.renderPlayerScore("o");
+				return
 				 
 			} else {
-				//alert(i + " plus win choices " + winChoices.length)
 				 
 			}
 				
