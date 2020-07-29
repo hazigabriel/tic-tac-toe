@@ -2,6 +2,7 @@
  	const toHome = function(){
  		document.querySelector(".home-screen").style.display = "block";
  		document.querySelector(".game-screen").style.display = "none";
+ 		 
  	};
  	const toGameScreen = function(){
  		document.querySelector(".home-screen").style.display = "none";
@@ -34,6 +35,20 @@
 			if(goBack == true){
 				changePageModal.toHome();
 				gameFlow.resetUserInput();
+				(function(){
+		 			gameBoard.player1Moves = [];
+					gameBoard.player2Moves = [];
+					gameFlow.continue = true;
+					player1.innerHTML = `${getUserInput().player1}: 0 points`; 
+					player2.innerHTML = `${getUserInput().player2}: 0 points`; 
+					document.querySelector(".player2Score").innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`;
+					gameBoard.playerTurn(getUserInput().player1, "x");
+
+					for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
+							document.querySelectorAll(".box")[i].innerHTML = ""
+					};
+					gameBoard.renderPlayersDefault();	
+	 			})
 
 			} else {
 				return
@@ -112,36 +127,39 @@ const gameFlow = {
 	renderPlayerChoice: function(){  
 		let squares = document.querySelectorAll(".box");
 
-		if(gameFlow.continue === false) {
-			return 
-		} else {
+	
 			squares.forEach(function(e){
 				e.addEventListener("click", function(){
-					if(gameBoard.player1Moves.length == gameBoard.player2Moves.length || gameBoard.player1Moves.length == gameBoard.player2Moves.length){
-						if(e.innerHTML != "") {
-							return
-						} else {
-							e.innerHTML = "x";
-						 	gameBoard.playerTurn(getUserInput().player2, "o")
-							gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
-							gameFlow.checkForWin()
-						}
-						 
+					if(gameFlow.continue == false) { //once the round is over, we assign a false value to this var, so that the game would stop
+						return 
+					} else {
+					 
+						if(gameBoard.player1Moves.length == gameBoard.player2Moves.length || gameBoard.player1Moves.length == gameBoard.player2Moves.length){
+							if(e.innerHTML != "") {
+								return
+							} else {
+								e.innerHTML = "x";
+							 	gameBoard.playerTurn(getUserInput().player2, "o")
+								gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
+								gameFlow.checkForWin()
+							}
+							 
 
-					} else{
-						if(e.innerHTML != "") {
-							return
-						} else {
-							e.innerHTML = "o";
-							gameBoard.playerTurn(getUserInput().player1, "x")
-							gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(e));
-							gameFlow.checkForWin()
+						} else{
+							if(e.innerHTML != "") {
+								return
+							} else {
+								e.innerHTML = "o";
+								gameBoard.playerTurn(getUserInput().player1, "x")
+								gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(e));
+								gameFlow.checkForWin()
+							}
 						}
-					}
+					}//
 				})
 
 			})
-		}
+	
 	},
 	getUserChoiceIndex: function(e){
 		let squaresArray = Array.prototype.slice.call(document.querySelectorAll(".box"));
@@ -167,10 +185,10 @@ const gameFlow = {
 
 			let checkIfSure = confirm("Are you sure you want to reset the score and the current round?")
 			if(checkIfSure) {
-			 
+			 		
 				gameBoard.player1Moves = [];
 				gameBoard.player2Moves = [];
-
+				gameFlow.continue = true;
 				player1.innerHTML = `${getUserInput().player1}: 0 points`; 
 
 				player2.innerHTML = `${getUserInput().player2}: 0 points`; 
@@ -197,7 +215,7 @@ const gameFlow = {
 			gameBoard.playerTurn(getUserInput().player1, "x");
 			gameBoard.player1Moves = [];
 			gameBoard.player2Moves = [];
-
+			gameFlow.continue = true;
 			for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
 					document.querySelectorAll(".box")[i].innerHTML = ""
 				
@@ -220,6 +238,7 @@ const gameFlow = {
 				gameBoard.player1Score++;
 				document.querySelector(".newRoundButton").style.display = "block";
 				gameFlow.newRound();
+				gameFlow.continue = false;
 				gameBoard.renderPlayerScore("x");
 				return
 				 
@@ -228,6 +247,7 @@ const gameFlow = {
 				gameBoard.player2Score++;
 				document.querySelector(".newRoundButton").style.display = "block";
 				gameFlow.newRound();
+				gameFlow.continue = false;
 				gameBoard.renderPlayerScore("o");
 				return
 				 
