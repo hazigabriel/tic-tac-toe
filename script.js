@@ -8,9 +8,17 @@
  		document.querySelector(".home-screen").style.display = "none";
  		document.querySelector(".game-screen").style.display = "block";
 
- 		gameBoard.renderPlayersDefault();	
- 		gameFlow.renderPlayerChoice() //start game
- 		gameFlow.resetGame()
+ 		gameBoard.renderPlayersDefault();
+ 		gameFlow.resetGame();
+ 		gameBoard.player1Score = 0;
+		gameBoard.player2Score = 0;
+ 		if(document.querySelector(".playAgainstAiCheckbox").checked) {
+ 			gameFlow.startAIGame()
+ 		} else {
+ 			gameFlow.start2PlayerGame()  
+ 		}
+  
+ 		 
  	};
  	const changePage = (function(){
  		let submitButton = document.querySelector(".submitPlayerName");
@@ -35,20 +43,24 @@
 			if(goBack == true){
 				changePageModal.toHome();
 				gameFlow.resetUserInput();
-				(function(){
-		 			gameBoard.player1Moves = [];
+			 	
+			 		let player1 = document.querySelector(".player1Score");
+					let player2 = document.querySelector(".player2Score");
+				 	gameBoard.player1Moves = [];
 					gameBoard.player2Moves = [];
 					gameFlow.continue = true;
 					player1.innerHTML = `${getUserInput().player1}: 0 points`; 
+
 					player2.innerHTML = `${getUserInput().player2}: 0 points`; 
+
 					document.querySelector(".player2Score").innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`;
 					gameBoard.playerTurn(getUserInput().player1, "x");
 
 					for(let i = 0; i < document.querySelectorAll(".box").length; i++ ){
-							document.querySelectorAll(".box")[i].innerHTML = ""
+						document.querySelectorAll(".box")[i].innerHTML = ""
 					};
-					gameBoard.renderPlayersDefault();	
-	 			})
+					gameBoard.renderPlayersDefault();
+			 	
 
 			} else {
 				return
@@ -124,10 +136,12 @@ const gameBoard = {
 }
 const gameFlow = {
 	continue: true,
-	renderPlayerChoice: function(){  
+	start2PlayerGame: function(){  
 		let squares = document.querySelectorAll(".box");
-
-	
+		if(document.querySelector(".playAgainstAiCheckbox").checked)  {
+			gameFlow.startAIGame();
+			return
+		} else {
 			squares.forEach(function(e){
 				e.addEventListener("click", function(){
 					if(gameFlow.continue == false) { //once the round is over, we assign a false value to this var, so that the game would stop
@@ -159,15 +173,60 @@ const gameFlow = {
 				})
 
 			})
-	
+		}
 	},
+	startAIGame: function(){  
+		let squares = document.querySelectorAll(".box");
+		if(document.querySelector(".playAgainstAiCheckbox").checked == false) {
+			gameFlow.start2PlayerGame();
+			return
+		}  else {
+
+			squares.forEach(function(e){
+				e.addEventListener("click", function(){
+					 
+					if(gameFlow.continue == false) {
+						return
+					} else {
+						if(e.innerHTML != "") {
+							return
+						} else {
+							e.innerHTML = "x";
+							gameBoard.playerTurn(getUserInput().player2, "o")
+							gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
+							console.log(gameBoard.player1Moves)
+						 
+							gameFlow.makeComputerMove()
+
+						}
+					}  
+				}) 
+
+			})
+
+		}
+
+
+	},
+ 	makeComputerMove: function(){
+		let squares = document.querySelectorAll(".box");
+ 		let randomCell = ((Math.ceil((Math.random() * 9)) * 10) / 10) - 1 ;
+ 		
+ 		if(squares[randomCell].innerHTML != "") {
+ 			gameFlow.makeComputerMove()
+ 		} else {
+ 			squares[randomCell].innerHTML = "o";
+ 			gameBoard.playerTurn(getUserInput().player1, "x")
+ 			gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(squares[randomCell]));
+ 			gameFlow.checkForWin()
+ 		}
+		
+
+	
+ 	},
 	getUserChoiceIndex: function(e){
 		let squaresArray = Array.prototype.slice.call(document.querySelectorAll(".box"));
 		return squaresArray.indexOf(e)
-	},
-	startGame: function(){
-		gameFlow.renderPlayerChoice()
-
 	},
 	resetUserInput: function(){
 		document.querySelector(".PlayerOneName").value = "";
@@ -185,7 +244,8 @@ const gameFlow = {
 
 			let checkIfSure = confirm("Are you sure you want to reset the score and the current round?")
 			if(checkIfSure) {
-			 		
+			 	gameBoard.player1Score = 0;
+			 	gameBoard.player2Score = 0;
 				gameBoard.player1Moves = [];
 				gameBoard.player2Moves = [];
 				gameFlow.continue = true;
