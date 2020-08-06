@@ -184,7 +184,7 @@ const gameFlow = {
 
 			squares.forEach(function(e){
 				e.addEventListener("click", function(){
-					 
+				 
 					if(gameFlow.continue == false) {
 						return
 					} else {
@@ -194,9 +194,9 @@ const gameFlow = {
 							e.innerHTML = "x";
 							gameBoard.playerTurn(getUserInput().player2, "o")
 							gameBoard.player1Moves.push(gameFlow.getUserChoiceIndex(e));
-							console.log(gameBoard.player1Moves)
-						 
 							gameFlow.makeComputerMove()
+						  	gameFlow.checkForWin();
+
 
 						}
 					}  
@@ -214,11 +214,12 @@ const gameFlow = {
  		
  		if(squares[randomCell].innerHTML != "") {
  			gameFlow.makeComputerMove()
+
  		} else {
  			squares[randomCell].innerHTML = "o";
  			gameBoard.playerTurn(getUserInput().player1, "x")
  			gameBoard.player2Moves.push(gameFlow.getUserChoiceIndex(squares[randomCell]));
- 			gameFlow.checkForWin()
+ 			 
  		}
 		
 
@@ -250,7 +251,6 @@ const gameFlow = {
 				gameBoard.player2Moves = [];
 				gameFlow.continue = true;
 				player1.innerHTML = `${getUserInput().player1}: 0 points`; 
-
 				player2.innerHTML = `${getUserInput().player2}: 0 points`; 
 
 				document.querySelector(".player2Score").innerHTML = `${getUserInput().player1}: ${gameBoard.player1Score} points`;
@@ -300,7 +300,7 @@ const gameFlow = {
 				gameFlow.newRound();
 				gameFlow.continue = false;
 				gameBoard.renderPlayerScore("x");
-				return
+				 
 				 
 			} else if (check(arr2, winChoices[i])){
 				document.querySelector(".currentGameStatus").innerHTML = `${getUserInput().player2} won!`;
@@ -309,14 +309,14 @@ const gameFlow = {
 				gameFlow.newRound();
 				gameFlow.continue = false;
 				gameBoard.renderPlayerScore("o");
-				return
+				 
 				 
 			} else if(arr1.length >= 5 && arr2.length >= 4) {
 				document.querySelector(".currentGameStatus").innerHTML = "It's a tie!";
 				document.querySelector(".newRoundButton").style.display = "block";
 				gameFlow.newRound();
 				gameBoard.renderPlayerScore("x");
-				return
+				  
 			}
 				
 		}
