@@ -12,10 +12,15 @@
  		gameFlow.resetGame();
  		gameBoard.player1Score = 0;
 		gameBoard.player2Score = 0;
+		document.querySelector(".newRoundButton").style.display = "none";
  		if(document.querySelector(".playAgainstAiCheckbox").checked) {
- 			gameFlow.startAIGame()
+ 			gameFlow.startAIGame();
+ 			gameFlow.vsPlayer = false;
+			gameFlow.vsAi = true;
  		} else {
- 			gameFlow.start2PlayerGame()  
+ 			gameFlow.start2PlayerGame();
+ 			gameFlow.vsPlayer = true;
+			gameFlow.vsAi = false; 
  		}
   
  		 
@@ -46,6 +51,8 @@
 			 	
 			 		let player1 = document.querySelector(".player1Score");
 					let player2 = document.querySelector(".player2Score");
+					gameFlow.vsPlayer = false;
+					gameFlow.vsAi = false;
 				 	gameBoard.player1Moves = [];
 					gameBoard.player2Moves = [];
 					gameFlow.continue = true;
@@ -136,17 +143,16 @@ const gameBoard = {
 }
 const gameFlow = {
 	continue: true,
+	vsPlayer: false,
+	vsAi: false,
 	start2PlayerGame: function(){  
 		let squares = document.querySelectorAll(".box");
-		if(document.querySelector(".playAgainstAiCheckbox").checked)  {
-			gameFlow.startAIGame();
-			return
-		} else {
+	
 			squares.forEach(function(e){
 				e.addEventListener("click", function(){
 					if(gameFlow.continue == false) { //once the round is over, we assign a false value to this var, so that the game would stop
 						return 
-					} else {
+					} else if (gameFlow.vsPlayer == true) {
 					 
 						if(gameBoard.player1Moves.length == gameBoard.player2Moves.length || gameBoard.player1Moves.length == gameBoard.player2Moves.length){
 							if(e.innerHTML != "") {
@@ -173,21 +179,16 @@ const gameFlow = {
 				})
 
 			})
-		}
+		
 	},
 	startAIGame: function(){  
 		let squares = document.querySelectorAll(".box");
-		if(document.querySelector(".playAgainstAiCheckbox").checked == false) {
-			gameFlow.start2PlayerGame();
-			return
-		}  else {
-
 			squares.forEach(function(e){
 				e.addEventListener("click", function(){
 				 
 					if(gameFlow.continue == false) {
 						return
-					} else {
+					} else if(gameFlow.vsAi == true){
 						if(e.innerHTML != "") {
 							return
 						} else {
@@ -205,9 +206,6 @@ const gameFlow = {
 				}) 
 
 			})
-
-		}
-
 
 	},
  	makeComputerMove: function(){
